@@ -98,12 +98,12 @@ CREATE DATABASE k3s OWNER k3s;
 
 Exit with `\q`.
 
-Learn PostgreSQL version:
+4. Learn PostgreSQL version:
 ```bash
 ls /etc/postgresql
 ```
 
-Edit pg_hba conf file:
+5. Edit pg_hba conf file:
 ```bash
 sudo nano /etc/postgresql/<your_version>/main/pg_hba.conf
 ```
@@ -113,7 +113,7 @@ Add this end of the file:
 host    all             all             0.0.0.0/0               md5
 ```
 
-Edit postgresql conf file:
+6. Edit postgresql conf file:
 ```bash
 sudo nano /etc/postgresql/<your_version>/main/postgresql.conf
 ```
@@ -128,7 +128,7 @@ Then changed it to:
 listen_addresses = '*'                   # what IP address(es) to listen on;
 ```
 
-Then restart the service:
+7. Restart the postgresql service:
 ```bash
 sudo systemctl restart postgresql
 ```
