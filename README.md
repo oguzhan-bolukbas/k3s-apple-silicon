@@ -73,3 +73,65 @@ worker-2                Running           192.168.205.10   Ubuntu 24.04 LTS
 worker-3                Running           192.168.205.11   Ubuntu 24.04 LTS
 ```
 
+### 4. Set Up External PostgreSQL DB
+1. Shell into db:
+```bash
+multipass shell db
+```
+
+2. Install PostgreSQL:
+```bash
+sudo apt update
+sudo apt install -y postgresql
+```
+
+3. Configure DB for external access:
+```bash
+sudo -u postgres psql
+```
+
+In the shell:
+```bash
+CREATE USER k3s WITH PASSWORD 'strongpassword';
+CREATE DATABASE k3s OWNER k3s;
+```
+
+Exit with `\q`.
+
+Learn PostgreSQL version:
+```bash
+ls /etc/postgresql
+```
+
+Edit pg_hba conf file:
+```bash
+sudo nano /etc/postgresql/<your_version>/main/pg_hba.conf
+```
+
+Add this end of the file:
+```bash
+host    all             all             0.0.0.0/0               md5
+```
+
+Edit postgresql conf file:
+```bash
+sudo nano /etc/postgresql/<your_version>/main/postgresql.conf
+```
+
+Uncomment this line:
+```bash
+#listen_addresses = 'localhost'         # what IP address(es) to listen on;
+```
+
+Then changed it to:
+```bash
+listen_addresses = '*'                   # what IP address(es) to listen on;
+```
+
+Then restart the service:
+```bash
+sudo systemctl restart postgresql
+```
+
+
+
