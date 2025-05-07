@@ -133,5 +133,47 @@ listen_addresses = '*'                   # what IP address(es) to listen on;
 sudo systemctl restart postgresql
 ```
 
+8. Exit from the VM:
+```bash
+exit
+```
 
+### 5. Load Balancer (HAProxy)
+1. Shell into lb:
+```bash
+multipass shell lb
+```
+
+2. Install HAProxy:
+```bash
+sudo apt update
+sudo apt install -y haproxy
+```
+
+3. Open "haproxy.cfg" file and changed it to:
+```bash
+frontend k8s-api
+    bind *:6443
+    default_backend k8s-masters
+
+backend k8s-masters
+    mode tcp
+    balance roundrobin
+    option tcp-check
+    server master-1 <IP_OF_MASTER1>:6443 check
+    server master-2 <IP_OF_MASTER2>:6443 check
+    server master-3 <IP_OF_MASTER3>:6443 check
+```
+
+If you do not know IP addresses of the "master" VMs, open a new terminal and run `multipass list` command.
+
+4. Restart HAProxy:
+```bash
+sudo systemctl restart haproxy
+```
+
+5. Exit from the VM:
+```bash
+exit
+```
 
